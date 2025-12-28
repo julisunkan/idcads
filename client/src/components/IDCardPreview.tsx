@@ -165,9 +165,18 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
             </div>
             {/* Signature Area */}
             <div className="text-center w-20">
-              <div className="border-t border-black/40 pt-0.5">
-                <div className="text-[7px] font-semibold" style={{ color: colors.primary }}>Signature</div>
-              </div>
+              {(card as any).signatureUrl ? (
+                <img 
+                  src={(card as any).signatureUrl} 
+                  alt="Signature" 
+                  className="w-full h-auto"
+                  style={{ maxHeight: '24px' }}
+                />
+              ) : (
+                <div className="border-t border-black/40 pt-0.5">
+                  <div className="text-[7px] font-semibold" style={{ color: colors.primary }}>Signature</div>
+                </div>
+              )}
             </div>
           </div>
 

@@ -16,7 +16,8 @@ export const cards = pgTable("cards", {
   idNumber: text("id_number").notNull().unique(),
   country: text("country").notNull(),
   theme: text("theme").notNull(), // 'blue', 'green', 'gold'
-  photoUrl: text("photo_url").notNull(), // Uploaded photo path
+  photoUrl: text("photo_url"), // Uploaded photo path
+  signatureUrl: text("signature_url"), // Signature from signature pad
   qrCodeUrl: text("qr_code_url"), // Generated QR code path
   status: text("status").notNull().default("VALID"), // VALID, REVOKED, EXPIRED
   createdAt: timestamp("created_at").defaultNow(),
@@ -50,6 +51,9 @@ export const insertCardSchema = createInsertSchema(cards).omit({
   qrCodeUrl: true, 
   generatedImageUrl: true, 
   generatedPdfUrl: true 
+}).extend({
+  photoUrl: z.string().optional(),
+  signatureUrl: z.string().optional(),
 });
 
 export const insertSettingsSchema = createInsertSchema(settings).omit({ id: true });

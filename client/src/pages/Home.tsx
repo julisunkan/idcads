@@ -5,6 +5,7 @@ import { useCreateCard } from "@/hooks/use-cards";
 import { useSettings } from "@/hooks/use-settings";
 import { Navbar } from "@/components/Navbar";
 import { IDCardPreview } from "@/components/IDCardPreview";
+import { SignaturePad } from "@/components/SignaturePad";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,12 +41,13 @@ export default function Home() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   // State for live preview
-  const [previewData, setPreviewData] = useState<Partial<InsertCard>>({
+  const [previewData, setPreviewData] = useState<Partial<InsertCard> & { status?: string }>({
     theme: "blue",
     status: "VALID",
     country: "USA"
   });
   const [uploading, setUploading] = useState(false);
+  const [signatureSaved, setSignatureSaved] = useState(false);
 
   const form = useForm<InsertCard>({
     resolver: zodResolver(insertCardSchema),
@@ -56,6 +58,7 @@ export default function Home() {
       country: "USA",
       theme: "blue",
       photoUrl: "",
+      signatureUrl: "",
     },
   });
 
@@ -111,8 +114,10 @@ export default function Home() {
           country: "USA",
           theme: "blue",
           photoUrl: "",
+          signatureUrl: "",
         });
-        setPreviewData({ theme: "blue", country: "USA", status: "VALID" });
+        setPreviewData({ theme: "blue", country: "USA", status: "VALID" } as Partial<InsertCard> & { status?: string });
+        setSignatureSaved(false);
       }
     });
   };
@@ -309,6 +314,34 @@ export default function Home() {
                       )}
                     />
 
+                    <FormField
+                      control={form.control}
+                      name="signatureUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <SignaturePad
+                            disabled={isPending}
+                            onSignatureSave={(signatureDataUrl) => {
+                              field.onChange(signatureDataUrl);
+                              handleValuesChange({ signatureUrl: signatureDataUrl });
+                              setSignatureSaved(true);
+                            }}
+                            onClear={() => {
+                              field.onChange("");
+                              handleValuesChange({ signatureUrl: "" });
+                              setSignatureSaved(false);
+                            }}
+                          />
+                          {signatureSaved && (
+                            <div className="text-sm text-green-600">
+                              ✓ Signature saved
+                            </div>
+                          )}
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
                     <Button type="submit" className="w-full h-11 text-lg font-semibold shadow-lg shadow-primary/20" disabled={isPending}>
                       {isPending ? (
                         <>
@@ -336,8 +369,8 @@ export default function Home() {
                  ref={cardRef}
                  card={{
                    ...previewData,
-                   watermarkText: settings?.watermarkText,
-                   watermarkOpacity: settings?.watermarkOpacity,
+                   watermarkText: settings?.watermarkText || undefined,
+                   watermarkOpacity: settings?.watermarkOpacity || undefined,
                  }} 
                />
              </div>
