@@ -1,0 +1,62 @@
+# Local Setup Instructions - Universal ID Card Generator
+
+This guide will help you run the Universal ID Card Generator on your Windows computer.
+
+## Prerequisites
+
+1.  **Node.js**: Install Node.js (version 20 or higher) from [nodejs.org](https://nodejs.org/).
+2.  **PostgreSQL**: Install PostgreSQL from [postgresql.org](https://www.postgresql.org/download/windows/).
+    - During installation, remember the password you set for the `postgres` user.
+3.  **Git**: (Optional) To clone the repository, or you can download the source code as a ZIP.
+
+## Setup Steps
+
+### 1. Database Configuration
+1.  Open **pgAdmin 4** or use the **psql** command line.
+2.  Create a new database named `id_generator`.
+3.  Your database connection string will look like this:
+    `postgres://postgres:YOUR_PASSWORD@localhost:5432/id_generator`
+    *(Replace `YOUR_PASSWORD` with your actual PostgreSQL password)*.
+
+### 2. Project Installation
+1.  Extract the project files to a folder (e.g., `C:\Projects\id-generator`).
+2.  Open **Command Prompt** or **PowerShell** in that folder.
+3.  Install the required dependencies:
+    ```bash
+    npm install
+    ```
+
+### 3. Environment Variables
+1.  Create a file named `.env` in the root directory of the project.
+2.  Add the following lines to the `.env` file:
+    ```env
+    DATABASE_URL=postgres://postgres:YOUR_PASSWORD@localhost:5432/id_generator
+    NODE_ENV=development
+    PORT=5000
+    ```
+
+### 4. Initialize Database Schema
+Run the following command to push the database schema to your local PostgreSQL instance:
+```bash
+npm run db:push
+```
+
+### 5. Running the Application
+To start the development server (both frontend and backend):
+```bash
+npm run dev
+```
+
+### 6. Access the Application
+- **User Interface**: Open your browser and go to `http://localhost:5000`
+- **Admin Dashboard**: Go to `http://localhost:5000/admin`
+- **Admin Settings**: Go to `http://localhost:5000/admin/settings`
+
+## Troubleshooting
+
+-   **Canvas Errors**: If you encounter errors related to `canvas`, you may need to install the Windows Build Tools:
+    `npm install --global --production windows-build-tools`
+-   **Port 5000**: If port 5000 is already in use, you can change the `PORT` value in your `.env` file.
+
+---
+Generated on: 2025-12-28
