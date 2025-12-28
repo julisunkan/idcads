@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { generateAssets } from "./lib/generator";
+import { validateAndSanitize, containsSuspiciousPatterns } from "./lib/validation";
 import { z } from "zod";
 import express from "express";
 import path from "path";
@@ -37,14 +38,30 @@ export async function registerRoutes(
         cb(null, uniqueSuffix + path.extname(file.originalname));
       },
     }),
-    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max (reduced for security)
     fileFilter: (req, file, cb) => {
-      const allowed = /\.(jpg|jpeg|png|gif|webp)$/i;
-      if (allowed.test(path.extname(file.originalname))) {
-        cb(null, true);
-      } else {
-        cb(new Error('Only image files are allowed'));
+      // Validate MIME type
+      const validMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (!validMimes.includes(file.mimetype)) {
+        cb(new Error('Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed'));
+        return;
       }
+      
+      // Validate file extension
+      const allowed = /\.(jpg|jpeg|png|gif|webp)$/i;
+      if (!allowed.test(path.extname(file.originalname))) {
+        cb(new Error('Invalid file extension'));
+        return;
+      }
+      
+      // Validate filename doesn't contain suspicious characters
+      const filename = path.basename(file.originalname);
+      if (!/^[a-zA-Z0-9._-]+$/.test(filename)) {
+        cb(new Error('Filename contains invalid characters'));
+        return;
+      }
+      
+      cb(null, true);
     },
   });
 
@@ -57,6 +74,13 @@ export async function registerRoutes(
   // Create Card (Public for MVP, or Protected? Requirement says "Admin can... View all", but "User inputs..." implies public or user facing. I'll make it public for generation, Admin for managing)
   app.post(api.cards.create.path, async (req, res) => {
     try {
+      // Check for SQL injection attempts
+      for (const [key, value] of Object.entries(req.body)) {
+        if (typeof value === 'string' && containsSuspiciousPatterns(value)) {
+          return res.status(400).json({ message: "Invalid input detected. Special characters not allowed." });
+        }
+      }
+
       const input = api.cards.create.input.parse(req.body);
       
       // Check for uniqueness if db doesn't handle it gracefully (it has unique constraint)
