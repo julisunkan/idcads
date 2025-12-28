@@ -69,8 +69,8 @@ export default function Settings() {
         body: formData,
       });
       const data = await res.json();
-      if (data.url) {
-        form.setValue(field, data.url);
+      if (data.photoUrl) {
+        form.setValue(field, data.photoUrl);
         toast({
           title: "Success",
           description: "Flag image uploaded successfully",

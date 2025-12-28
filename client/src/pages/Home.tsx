@@ -452,6 +452,8 @@ export default function Home() {
                    ...previewData,
                    watermarkText: settings?.watermarkText || undefined,
                    watermarkOpacity: settings?.watermarkOpacity || undefined,
+                   watermarkFlagUrl: settings?.watermarkFlagUrl || undefined,
+                   topLogoFlagUrl: settings?.topLogoFlagUrl || undefined,
                  }} 
                />
              </div>
