@@ -26,14 +26,17 @@ import {
 } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRef, useState } from "react";
-import { Loader2, Download, Printer, RefreshCw } from "lucide-react";
+import { Loader2, Download, Printer, RefreshCw, Upload } from "lucide-react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
   const { mutate: createCard, isPending } = useCreateCard();
   const { data: settings } = useSettings();
+  const { toast } = useToast();
   const cardRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // State for live preview
   const [previewData, setPreviewData] = useState<Partial<InsertCard>>({
@@ -41,6 +44,7 @@ export default function Home() {
     status: "VALID",
     country: "USA"
   });
+  const [uploading, setUploading] = useState(false);
 
   const form = useForm<InsertCard>({
     resolver: zodResolver(insertCardSchema),
@@ -57,6 +61,43 @@ export default function Home() {
   // Update preview as user types
   const handleValuesChange = (changedValues: Partial<InsertCard>) => {
     setPreviewData(prev => ({ ...prev, ...changedValues }));
+  };
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('photo', file);
+      
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to upload photo');
+      }
+
+      const { photoUrl } = await res.json();
+      form.setValue('photoUrl', photoUrl);
+      handleValuesChange({ photoUrl });
+      
+      toast({
+        title: "Success",
+        description: "Photo uploaded successfully",
+      });
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Failed to upload photo",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
   };
 
   const onSubmit = (data: InsertCard) => {
@@ -234,11 +275,34 @@ export default function Home() {
                       name="photoUrl"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Photo URL</FormLabel>
+                          <FormLabel>Photo</FormLabel>
                           <FormControl>
-                            <Input placeholder="https://..." {...field} />
+                            <div className="space-y-2">
+                              <input 
+                                ref={fileInputRef}
+                                type="file" 
+                                accept="image/*"
+                                onChange={handlePhotoUpload}
+                                className="hidden"
+                              />
+                              <Button 
+                                type="button"
+                                variant="outline"
+                                className="w-full"
+                                onClick={() => fileInputRef.current?.click()}
+                                disabled={uploading || isPending}
+                              >
+                                <Upload className="mr-2 h-4 w-4" />
+                                {uploading ? "Uploading..." : "Upload Photo"}
+                              </Button>
+                              {field.value && (
+                                <div className="text-sm text-muted-foreground">
+                                  ✓ Photo uploaded
+                                </div>
+                              )}
+                            </div>
                           </FormControl>
-                          <FormDescription>Link to a square profile photo (or leave empty)</FormDescription>
+                          <FormDescription>Upload a square profile photo (JPG, PNG, GIF, WebP)</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}

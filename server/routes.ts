@@ -7,13 +7,46 @@ import { generateAssets } from "./lib/generator";
 import { z } from "zod";
 import express from "express";
 import path from "path";
+import multer from "multer";
+import fs from "fs";
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
   // Serve uploaded files
-  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+  const uploadsDir = path.join(process.cwd(), 'uploads');
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+  app.use('/uploads', express.static(uploadsDir));
+
+  // Configure multer for file uploads
+  const photosDir = path.join(uploadsDir, 'photos');
+  if (!fs.existsSync(photosDir)) {
+    fs.mkdirSync(photosDir, { recursive: true });
+  }
+
+  const upload = multer({
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, photosDir);
+      },
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+      },
+    }),
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+    fileFilter: (req, file, cb) => {
+      const allowed = /\.(jpg|jpeg|png|gif|webp)$/i;
+      if (allowed.test(path.extname(file.originalname))) {
+        cb(null, true);
+      } else {
+        cb(new Error('Only image files are allowed'));
+      }
+    },
+  });
 
   // Setup Auth
   await setupAuth(app);
@@ -99,6 +132,15 @@ export async function registerRoutes(
   app.put(api.settings.update.path, isAuthenticated, async (req, res) => {
     const settings = await storage.updateSettings(req.body);
     res.json(settings);
+  });
+
+  // File Upload (Public)
+  app.post('/api/upload', upload.single('photo'), (req, res) => {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file provided" });
+    }
+    const photoUrl = `/uploads/photos/${req.file.filename}`;
+    res.json({ photoUrl });
   });
 
   return httpServer;
