@@ -15,106 +15,183 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
     const countryName = COUNTRIES.find(c => c.code === card.country)?.name || card.country || "Unknown Country";
     const countryFlag = getCountryFlag(card.country as string);
     
-    const themeClasses = {
-      blue: "bg-gradient-to-br from-blue-50 to-blue-100 border-blue-300 text-blue-900",
-      green: "bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-300 text-emerald-900",
-      gold: "bg-gradient-to-br from-amber-50 to-amber-100 border-amber-300 text-amber-900",
+    const getThemeColors = (theme: string) => {
+      switch(theme) {
+        case 'blue':
+          return {
+            primary: '#003366',
+            secondary: '#0066CC',
+            accent: '#1E90FF',
+            light: '#E6F2FF',
+            border: '#004499'
+          };
+        case 'green':
+          return {
+            primary: '#1B4D2D',
+            secondary: '#2D7F4F',
+            accent: '#3FA569',
+            light: '#E6F4ED',
+            border: '#2D6B45'
+          };
+        case 'gold':
+          return {
+            primary: '#8B6914',
+            secondary: '#B8860B',
+            accent: '#DAA520',
+            light: '#FFF8DC',
+            border: '#A0752D'
+          };
+        default:
+          return {
+            primary: '#003366',
+            secondary: '#0066CC',
+            accent: '#1E90FF',
+            light: '#E6F2FF',
+            border: '#004499'
+          };
+      }
     };
 
-    const currentTheme = themeClasses[(card.theme as keyof typeof themeClasses) || "blue"];
+    const colors = getThemeColors(card.theme as string);
 
     return (
       <div
         ref={ref}
         className={cn(
-          "relative w-[350px] h-[220px] rounded border-2 shadow-lg overflow-hidden print:shadow-none flex flex-col",
-          currentTheme,
+          "relative w-[350px] h-[220px] rounded-sm shadow-2xl overflow-hidden print:shadow-none flex flex-col font-sans",
           className
         )}
+        style={{
+          backgroundColor: colors.light,
+          borderTop: `3px solid ${colors.primary}`,
+          borderBottom: `3px solid ${colors.primary}`,
+          borderLeft: `1px solid ${colors.border}`,
+          borderRight: `1px solid ${colors.border}`,
+        }}
       >
+        {/* Security Background Pattern */}
+        <div className="absolute inset-0 opacity-[3%] pointer-events-none" style={{
+          backgroundImage: `repeating-linear-gradient(45deg, ${colors.primary}, ${colors.primary}2px, transparent 2px, transparent 4px)`,
+        }}></div>
+
         {/* Watermark */}
         {card.watermarkText && (
           <div 
-            className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
-            style={{ opacity: (card.watermarkOpacity || 15) / 100 }}
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            style={{ opacity: (card.watermarkOpacity || 10) / 100 }}
           >
-            <span className="text-3xl font-bold uppercase rotate-[-25deg] whitespace-nowrap select-none">
+            <span className="text-2xl font-black uppercase rotate-[-25deg] whitespace-nowrap select-none" style={{ color: colors.primary }}>
               {card.watermarkText}
             </span>
           </div>
         )}
 
-        {/* Header with Country Info */}
-        <div className="relative z-10 px-3 py-2 border-b border-black/10 bg-white/40">
-          <div className="flex justify-between items-start">
-            <div className="flex-1">
-              <h3 className="text-[9px] font-bold uppercase tracking-widest opacity-75 leading-tight">National Identity Card</h3>
-              <p className="text-[11px] font-bold uppercase leading-tight">{countryName}</p>
+        {/* Top Header with Seal */}
+        <div className="relative z-10 flex items-center justify-between px-3 py-2" style={{ backgroundColor: `${colors.primary}15` }}>
+          <div className="flex items-center gap-2 flex-1">
+            {/* Official Seal */}
+            <div className="w-10 h-10 rounded-full border-2 flex items-center justify-center flex-shrink-0" style={{ 
+              borderColor: colors.primary,
+              backgroundColor: 'white'
+            }}>
+              <span className="text-lg">{countryFlag}</span>
             </div>
-            <div className="text-3xl flex-shrink-0 ml-2">
-              {countryFlag}
+            <div className="flex-1 min-w-0">
+              <div className="text-[8px] font-black uppercase tracking-widest" style={{ color: colors.primary }}>
+                NATIONAL IDENTITY CARD
+              </div>
+              <div className="text-[10px] font-bold uppercase leading-none" style={{ color: colors.secondary }}>
+                {countryName}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Body */}
-        <div className="relative z-10 p-3 flex gap-3 flex-1 overflow-hidden">
-          {/* Photo Area */}
-          <div className="w-20 h-20 flex-shrink-0 overflow-hidden border border-black/20 rounded">
-            {card.photoUrl ? (
-              <img 
-                src={card.photoUrl} 
-                alt="ID Photo" 
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = "https://placehold.co/80x80?text=No+Photo";
-                }}
-              />
-            ) : (
-              <div className="w-full h-full bg-black/5 flex items-center justify-center text-[8px] text-center text-muted-foreground">
-                No Photo
+        {/* Main Content Area */}
+        <div className="relative z-10 flex-1 px-3 py-2.5 flex gap-2.5">
+          {/* Left: Photo */}
+          <div className="flex flex-col items-center gap-1 flex-shrink-0">
+            <div className="w-20 h-24 rounded-sm overflow-hidden" style={{ 
+              border: `2px solid ${colors.primary}`,
+              backgroundColor: '#f0f0f0'
+            }}>
+              {card.photoUrl ? (
+                <img 
+                  src={card.photoUrl} 
+                  alt="ID Photo" 
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "https://placehold.co/80x96?text=Photo";
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-[8px] text-center text-gray-400">
+                  PHOTO
+                </div>
+              )}
+            </div>
+            {/* Signature Area */}
+            <div className="text-center w-20">
+              <div className="border-t border-black/40 pt-0.5">
+                <div className="text-[7px] font-semibold" style={{ color: colors.primary }}>Signature</div>
               </div>
-            )}
+            </div>
           </div>
 
-          {/* Details */}
-          <div className="flex-1 flex flex-col justify-between min-w-0">
-            <div className="space-y-1">
+          {/* Right: Information */}
+          <div className="flex-1 flex flex-col justify-between">
+            {/* Personal Info */}
+            <div className="space-y-1.5">
+              {/* Name */}
               <div>
-                <label className="text-[7px] uppercase font-bold opacity-60 block leading-tight">Full Name</label>
-                <div className="font-bold text-sm leading-tight truncate">
-                  {card.fullName || "Not Specified"}
+                <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
+                  Full Name
+                </div>
+                <div className="text-sm font-bold leading-tight tracking-wide text-black truncate" style={{ fontFamily: 'Georgia, serif' }}>
+                  {card.fullName || "NOT SPECIFIED"}
                 </div>
               </div>
-              
-              <div className="grid grid-cols-2 gap-1">
+
+              {/* Grid: DOB and ID Number */}
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[7px] uppercase font-bold opacity-60 block leading-tight">Date of Birth</label>
-                  <div className="font-mono text-[11px] leading-tight">{card.dob || "--/--/----"}</div>
+                  <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
+                    Date of Birth
+                  </div>
+                  <div className="text-[11px] font-mono font-semibold text-black">
+                    {card.dob || "--/--/----"}
+                  </div>
                 </div>
                 <div>
-                  <label className="text-[7px] uppercase font-bold opacity-60 block leading-tight">ID #</label>
-                  <div className="font-mono text-[11px] leading-tight truncate">{card.idNumber || "--------"}</div>
+                  <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
+                    ID Number
+                  </div>
+                  <div className="text-[11px] font-mono font-semibold text-black">
+                    {card.idNumber || "--------"}
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Status & QR */}
-            <div className="flex justify-between items-end gap-1 pt-1">
+            {/* Bottom: Status and QR */}
+            <div className="flex items-end justify-between gap-1 pt-1 border-t" style={{ borderColor: `${colors.primary}40` }}>
               <div className={cn(
-                "px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wide whitespace-nowrap",
-                card.status === "VALID" ? "bg-green-500/30 text-green-800" :
-                card.status === "REVOKED" ? "bg-red-500/30 text-red-800" :
-                "bg-gray-500/30 text-gray-800"
+                "px-1.5 py-0.5 rounded-sm text-[7px] font-black uppercase tracking-widest whitespace-nowrap",
+                card.status === "VALID" ? "bg-green-600/20 text-green-800" :
+                card.status === "REVOKED" ? "bg-red-600/20 text-red-800" :
+                "bg-blue-600/20 text-blue-800"
               )}>
-                {card.status || "DRAFT"}
+                {card.status || "VALID"}
               </div>
               
               {/* QR Code */}
-              <div className="w-10 h-10 bg-white p-0.5 rounded border border-black/10 flex-shrink-0">
+              <div className="w-11 h-11 bg-white p-0.5 rounded-sm flex-shrink-0" style={{
+                border: `1.5px solid ${colors.primary}`,
+                boxShadow: `0 1px 3px ${colors.primary}30`
+              }}>
                 <QRCodeSVG 
                   value={`https://${window.location.host}/verify/${card.idNumber}`} 
-                  size={36}
+                  size={38}
                   level="L"
                   includeMargin={false}
                 />
@@ -122,6 +199,11 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
             </div>
           </div>
         </div>
+
+        {/* Security Line */}
+        <div className="absolute bottom-0 left-0 right-0 h-1" style={{
+          background: `linear-gradient(90deg, ${colors.secondary}, ${colors.accent}, ${colors.secondary})`,
+        }}></div>
       </div>
     );
   }
