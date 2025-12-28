@@ -86,7 +86,7 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
       <div
         ref={ref}
         className={cn(
-          "relative w-[85mm] h-[54mm] rounded-sm shadow-2xl overflow-hidden print:shadow-none flex flex-col font-sans",
+          "relative w-[130mm] h-[85mm] rounded-sm shadow-2xl overflow-hidden print:shadow-none flex flex-col font-sans",
           className
         )}
         style={{
