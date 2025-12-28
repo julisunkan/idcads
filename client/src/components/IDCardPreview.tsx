@@ -191,7 +191,7 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
           {/* Right Column: Information */}
           <div className="col-span-9 flex flex-col justify-between text-black">
             {/* Top Section */}
-            <div className="space-y-0.5">
+            <div className="space-y-2">
               {/* Full Name */}
               <div>
                 <div className="text-[8px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>NAME</div>
