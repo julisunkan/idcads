@@ -69,6 +69,30 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
             light: '#FFF8DC',
             border: '#A0752D'
           };
+        case 'red':
+          return {
+            primary: '#8B0000',
+            secondary: '#DC143C',
+            accent: '#FF4500',
+            light: '#FFF5F5',
+            border: '#B22222'
+          };
+        case 'purple':
+          return {
+            primary: '#4B0082',
+            secondary: '#8A2BE2',
+            accent: '#9370DB',
+            light: '#F8F4FF',
+            border: '#6A5ACD'
+          };
+        case 'silver':
+          return {
+            primary: '#4F4F4F',
+            secondary: '#808080',
+            accent: '#A9A9A9',
+            light: '#F5F5F5',
+            border: '#696969'
+          };
         default:
           return {
             primary: '#003366',

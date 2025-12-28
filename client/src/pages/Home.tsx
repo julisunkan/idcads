@@ -372,6 +372,9 @@ export default function Home() {
                                 <SelectItem value="blue">Corporate Blue</SelectItem>
                                 <SelectItem value="green">Secure Green</SelectItem>
                                 <SelectItem value="gold">Premium Gold</SelectItem>
+                                <SelectItem value="red">Diplomatic Red</SelectItem>
+                                <SelectItem value="purple">Royal Purple</SelectItem>
+                                <SelectItem value="silver">Official Silver</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
