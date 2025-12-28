@@ -89,12 +89,13 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
         {/* Top Header with Seal */}
         <div className="relative z-10 flex items-center justify-between px-3 py-2" style={{ backgroundColor: `${colors.primary}15` }}>
           <div className="flex items-center gap-2 flex-1">
-            {/* Official Seal */}
-            <div className="w-10 h-10 rounded-full border-2 flex items-center justify-center flex-shrink-0" style={{ 
+            {/* Official Seal - Large Flag */}
+            <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center flex-shrink-0" style={{ 
               borderColor: colors.primary,
-              backgroundColor: 'white'
+              backgroundColor: 'white',
+              boxShadow: `0 2px 4px ${colors.primary}30`
             }}>
-              <span className="text-lg">{countryFlag}</span>
+              <span className="text-4xl">{countryFlag}</span>
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-[8px] font-black uppercase tracking-widest" style={{ color: colors.primary }}>
@@ -104,6 +105,10 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
                 {countryName}
               </div>
             </div>
+          </div>
+          {/* Flag decoration on right */}
+          <div className="text-2xl flex-shrink-0 ml-2 opacity-80">
+            {countryFlag}
           </div>
         </div>
 
@@ -175,13 +180,17 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
 
             {/* Bottom: Status and QR */}
             <div className="flex items-end justify-between gap-1 pt-1 border-t" style={{ borderColor: `${colors.primary}40` }}>
-              <div className={cn(
-                "px-1.5 py-0.5 rounded-sm text-[7px] font-black uppercase tracking-widest whitespace-nowrap",
-                card.status === "VALID" ? "bg-green-600/20 text-green-800" :
-                card.status === "REVOKED" ? "bg-red-600/20 text-red-800" :
-                "bg-blue-600/20 text-blue-800"
-              )}>
-                {card.status || "VALID"}
+              <div className="flex items-center gap-1">
+                <div className={cn(
+                  "px-1.5 py-0.5 rounded-sm text-[7px] font-black uppercase tracking-widest whitespace-nowrap",
+                  card.status === "VALID" ? "bg-green-600/20 text-green-800" :
+                  card.status === "REVOKED" ? "bg-red-600/20 text-red-800" :
+                  "bg-blue-600/20 text-blue-800"
+                )}>
+                  {card.status || "VALID"}
+                </div>
+                {/* Mini flag next to status */}
+                <span className="text-xs opacity-60">{countryFlag}</span>
               </div>
               
               {/* QR Code */}
