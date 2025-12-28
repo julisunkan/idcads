@@ -139,6 +139,29 @@ export default function Home() {
     link.click();
   };
 
+  const handleDownloadPDF = async () => {
+    if (!cardRef.current) return;
+    try {
+      const canvas = await html2canvas(cardRef.current, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+      
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: [130, 85] // ID card size in mm (130x85mm)
+      });
+      
+      pdf.addImage(imgData, "PNG", 0, 0, 130, 85);
+      pdf.save(`ID-${form.getValues().idNumber}.pdf`);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to generate PDF",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-muted/30">
       <Navbar />
@@ -468,9 +491,9 @@ export default function Home() {
                   <Download className="mr-2 h-4 w-4" />
                   PNG
                 </Button>
-                <Button variant="outline" className="flex-1" disabled>
-                  <Printer className="mr-2 h-4 w-4" />
-                  Print
+                <Button variant="outline" className="flex-1" onClick={handleDownloadPDF} disabled={!form.formState.isValid}>
+                  <Download className="mr-2 h-4 w-4" />
+                  PDF
                 </Button>
              </div>
              
