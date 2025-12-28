@@ -1,4 +1,3 @@
-import { useAuth } from "@/hooks/use-auth";
 import { useCards, useUpdateCardStatus } from "@/hooks/use-cards";
 import { Navbar } from "@/components/Navbar";
 import { Loader2, AlertCircle, Eye, Download, Ban, CheckCircle } from "lucide-react";
@@ -23,24 +22,13 @@ import { IDCardPreview } from "@/components/IDCardPreview";
 import { useSettings } from "@/hooks/use-settings";
 import { format } from "date-fns";
 import { useState } from "react";
-import { redirectToLogin } from "@/lib/auth-utils";
-import { useToast } from "@/hooks/use-toast";
 
 export default function Dashboard() {
-  const { user, isLoading: authLoading } = useAuth();
   const { data: cards, isLoading: cardsLoading } = useCards();
   const { mutate: updateStatus } = useUpdateCardStatus();
   const { data: settings } = useSettings();
-  const { toast } = useToast();
 
   const [selectedCard, setSelectedCard] = useState<any>(null);
-
-  if (authLoading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin" /></div>;
-  
-  if (!user) {
-    redirectToLogin(toast);
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-background">
