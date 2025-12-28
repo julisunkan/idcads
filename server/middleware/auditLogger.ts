@@ -38,7 +38,7 @@ export function auditLogger(req: Request, res: Response, next: NextFunction) {
         auditLogs.shift();
       }
       
-      console.log(`[AUDIT] ${log.action} by ${log.userId} - Status: ${log.statusCode}`);
+      // console.log(`[AUDIT] ${log.action} by ${log.userId} - Status: ${log.statusCode}`);
     }
     
     return originalJson.call(res, body);

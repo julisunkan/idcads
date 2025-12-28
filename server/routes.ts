@@ -142,7 +142,7 @@ export async function registerRoutes(
           field: err.errors[0].path.join('.'),
         });
       }
-      console.error('Card creation error:', err);
+      // console.error('Card creation error:', err);
       res.status(500).json({ message: "Internal Server Error" });
     }
   });
