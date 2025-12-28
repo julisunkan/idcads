@@ -65,6 +65,44 @@ export async function registerRoutes(
     },
   });
 
+  // Upload middleware that accepts any single file field
+  const uploadAny = multer({
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, photosDir);
+      },
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+      },
+    }),
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
+    fileFilter: (req, file, cb) => {
+      // Validate MIME type
+      const validMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (!validMimes.includes(file.mimetype)) {
+        cb(new Error('Invalid file type'));
+        return;
+      }
+      
+      // Validate file extension
+      const allowed = /\.(jpg|jpeg|png|gif|webp)$/i;
+      if (!allowed.test(path.extname(file.originalname))) {
+        cb(new Error('Invalid file extension'));
+        return;
+      }
+      
+      // Validate filename
+      const filename = path.basename(file.originalname);
+      if (!/^[a-zA-Z0-9._-]+$/.test(filename)) {
+        cb(new Error('Filename invalid'));
+        return;
+      }
+      
+      cb(null, true);
+    },
+  }).any();
+
   // Setup Auth
   await setupAuth(app);
   registerAuthRoutes(app);
@@ -158,13 +196,22 @@ export async function registerRoutes(
     res.json(settings);
   });
 
-  // File Upload (Public)
-  app.post('/api/upload', upload.single('file'), (req, res) => {
-    if (!req.file) {
-      return res.status(400).json({ message: "No file provided" });
+  // File Upload (Public) - accepts any single file field
+  app.post('/api/upload', uploadAny, (req, res) => {
+    try {
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ message: "No file provided" });
+      }
+      
+      // Get the first (and should be only) file
+      const file = Array.isArray(req.files) ? req.files[0] : req.files;
+      const filename = file.filename || `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
+      const url = `/uploads/photos/${filename}`;
+      res.json({ url });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "File upload failed";
+      res.status(400).json({ message });
     }
-    const url = `/uploads/photos/${req.file.filename}`;
-    res.json({ url });
   });
 
   return httpServer;
