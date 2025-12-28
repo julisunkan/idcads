@@ -71,9 +71,18 @@ export default function Settings() {
       const data = await res.json();
       if (data.url) {
         form.setValue(field, data.url);
+        toast({
+          title: "Success",
+          description: "Flag image uploaded successfully",
+        });
       }
     } catch (error) {
       console.error('Upload failed:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload flag image",
+        variant: "destructive",
+      });
     }
   };
 

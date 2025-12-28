@@ -6,7 +6,7 @@ import { COUNTRIES } from "@/lib/countries";
 import { type Card } from "@shared/schema";
 
 interface IDCardPreviewProps {
-  card: Partial<Card> & { watermarkText?: string; watermarkOpacity?: number; watermarkFlagUrl?: string; topLogoFlagUrl?: string };
+  card: (Partial<Card> & { watermarkText?: string; watermarkOpacity?: number; watermarkFlagUrl?: string; topLogoFlagUrl?: string });
   className?: string;
 }
 
@@ -127,8 +127,8 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
               backgroundColor: 'white',
               boxShadow: `0 1px 3px ${colors.primary}40`
             }}>
-              {(card as any).topLogoFlagUrl ? (
-                <img src={(card as any).topLogoFlagUrl} alt="Logo" className="w-full h-full object-cover rounded-full" />
+              {card.topLogoFlagUrl ? (
+                <img src={card.topLogoFlagUrl} alt="Logo" className="w-full h-full object-cover rounded-full" />
               ) : (
                 <span className="text-3xl">{countryFlag}</span>
               )}
@@ -147,8 +147,8 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
           
           {/* Right: Flag */}
           <div className="col-span-2 text-right">
-            {(card as any).topLogoFlagUrl ? (
-              <img src={(card as any).topLogoFlagUrl} alt="Logo" className="h-8 w-auto" />
+            {card.topLogoFlagUrl ? (
+              <img src={card.topLogoFlagUrl} alt="Logo" className="h-8 w-auto" />
             ) : (
               <span className="text-2xl">{countryFlag}</span>
             )}
@@ -183,9 +183,9 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
             
             {/* Signature */}
             <div className="text-center border-t pt-0.5" style={{ borderColor: colors.primary }}>
-              {(card as any).signatureUrl ? (
+              {card.signatureUrl ? (
                 <img 
-                  src={(card as any).signatureUrl} 
+                  src={card.signatureUrl} 
                   alt="Signature" 
                   className="w-full h-auto"
                   style={{ maxHeight: '16px' }}
@@ -219,7 +219,7 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
                 <div>
                   <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>SEX</div>
                   <div className="text-[11px] font-bold">
-                    {(card as any).sex || "M"}
+                    {card.sex || "M"}
                   </div>
                 </div>
               </div>
@@ -236,7 +236,7 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
               <div>
                 <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ADDRESS</div>
                 <div className="text-[10px] font-bold leading-tight line-clamp-2">
-                  {(card as any).address || "---"}
+                  {card.address || "---"}
                 </div>
               </div>
 
@@ -245,13 +245,13 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
                 <div>
                   <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ISSUED</div>
                   <div className="text-[11px] font-bold">
-                    {(card as any).issueDate || "--/--/----"}
+                    {card.issueDate || "--/--/----"}
                   </div>
                 </div>
                 <div>
                   <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>EXPIRES</div>
                   <div className="text-[11px] font-bold">
-                    {(card as any).expiryDate || "--/--/----"}
+                    {card.expiryDate || "--/--/----"}
                   </div>
                 </div>
               </div>
