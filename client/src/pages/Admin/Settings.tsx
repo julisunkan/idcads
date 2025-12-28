@@ -1,4 +1,3 @@
-import { useAuth } from "@/hooks/use-auth";
 import { useSettings, useUpdateSettings } from "@/hooks/use-settings";
 import { Navbar } from "@/components/Navbar";
 import { useForm } from "react-hook-form";
@@ -20,11 +19,9 @@ import {
 } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect } from "react";
-import { redirectToLogin } from "@/lib/auth-utils";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Settings() {
-  const { user, isLoading: authLoading } = useAuth();
   const { data: settings, isLoading: settingsLoading } = useSettings();
   const { mutate: updateSettings, isPending: isSaving } = useUpdateSettings();
   const { toast } = useToast();
@@ -100,12 +97,7 @@ export default function Settings() {
     updateSettings(data);
   };
 
-  if (authLoading || settingsLoading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin" /></div>;
-
-  if (!user) {
-    redirectToLogin(toast);
-    return null;
-  }
+  if (settingsLoading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin" /></div>;
 
   return (
     <div className="min-h-screen bg-background">
