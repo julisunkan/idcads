@@ -65,8 +65,7 @@ export function validateAndSanitize<T>(data: unknown, schema: z.ZodSchema): T {
 export function containsSuspiciousPatterns(input: string): boolean {
   const patterns = [
     /(\b(UNION|SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE)\b)/i,
-    /(-{2}|\/\*|\*\/|;)/,
-    /(['"`\\])/
+    /(-{2}|\/\*|\*\/|;)/
   ];
   
   return patterns.some(pattern => pattern.test(input));
