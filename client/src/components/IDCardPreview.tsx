@@ -133,10 +133,10 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
           
           {/* Center: Title and Country */}
           <div className="col-span-8">
-            <div className="text-[6.5px] font-black uppercase tracking-wider" style={{ color: colors.primary, letterSpacing: '0.1em' }}>
+            <div className="text-[10px] font-black uppercase tracking-wider" style={{ color: colors.primary, letterSpacing: '0.1em' }}>
               NATIONAL IDENTITY CARD
             </div>
-            <div className="text-[9px] font-black uppercase" style={{ color: colors.secondary }}>
+            <div className="text-[13px] font-black uppercase" style={{ color: colors.secondary }}>
               {countryName}
             </div>
           </div>
@@ -194,8 +194,8 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
             <div className="space-y-0.5">
               {/* Full Name */}
               <div>
-                <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>NAME</div>
-                <div className="text-[11px] font-black leading-tight tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
+                <div className="text-[8px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>NAME</div>
+                <div className="text-[14px] font-black leading-tight tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
                   {card.fullName || "NOT SPECIFIED"}
                 </div>
               </div>
@@ -203,14 +203,14 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
               {/* 2-Column Grid: DOB and Sex */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>DOB</div>
-                  <div className="text-[9px] font-bold">
+                  <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>DOB</div>
+                  <div className="text-[11px] font-bold">
                     {card.dob || "--/--/----"}
                   </div>
                 </div>
                 <div>
-                  <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>SEX</div>
-                  <div className="text-[9px] font-bold">
+                  <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>SEX</div>
+                  <div className="text-[11px] font-bold">
                     {(card as any).sex || "M"}
                   </div>
                 </div>
@@ -218,16 +218,16 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
 
               {/* ID Number */}
               <div>
-                <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ID NO.</div>
-                <div className="text-[9px] font-mono font-bold">
+                <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ID NO.</div>
+                <div className="text-[11px] font-mono font-bold">
                   {card.idNumber || "--------"}
                 </div>
               </div>
 
               {/* Address */}
               <div>
-                <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ADDRESS</div>
-                <div className="text-[8px] font-bold leading-tight line-clamp-2">
+                <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ADDRESS</div>
+                <div className="text-[10px] font-bold leading-tight line-clamp-2">
                   {(card as any).address || "---"}
                 </div>
               </div>
@@ -235,14 +235,14 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
               {/* 2-Column Grid: Issue & Expiry Dates */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ISSUED</div>
-                  <div className="text-[9px] font-bold">
+                  <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ISSUED</div>
+                  <div className="text-[11px] font-bold">
                     {(card as any).issueDate || "--/--/----"}
                   </div>
                 </div>
                 <div>
-                  <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>EXPIRES</div>
-                  <div className="text-[9px] font-bold">
+                  <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>EXPIRES</div>
+                  <div className="text-[11px] font-bold">
                     {(card as any).expiryDate || "--/--/----"}
                   </div>
                 </div>
