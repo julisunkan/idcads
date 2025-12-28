@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { COUNTRIES } from "@/lib/countries";
 import {
   Form,
   FormControl,
@@ -227,12 +228,12 @@ export default function Home() {
                                   <SelectValue placeholder="Select Country" />
                                 </SelectTrigger>
                               </FormControl>
-                              <SelectContent>
-                                <SelectItem value="USA">United States</SelectItem>
-                                <SelectItem value="CAN">Canada</SelectItem>
-                                <SelectItem value="GBR">United Kingdom</SelectItem>
-                                <SelectItem value="FRA">France</SelectItem>
-                                <SelectItem value="DEU">Germany</SelectItem>
+                              <SelectContent className="max-h-60">
+                                {COUNTRIES.map((country) => (
+                                  <SelectItem key={country.code} value={country.code}>
+                                    {country.name}
+                                  </SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                             <FormMessage />
