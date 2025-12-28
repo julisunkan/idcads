@@ -206,8 +206,13 @@ export async function registerRoutes(
       // Get the first (and should be only) file
       const file = Array.isArray(req.files) ? req.files[0] : req.files;
       const filename = file.filename || `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
-      const url = `/uploads/photos/${filename}`;
-      res.json({ url });
+      
+      // Construct absolute URL using the request host
+      const protocol = req.protocol || 'http';
+      const host = req.get('host') || 'localhost:5000';
+      const photoUrl = `${protocol}://${host}/uploads/photos/${filename}`;
+      
+      res.json({ photoUrl });
     } catch (err) {
       const message = err instanceof Error ? err.message : "File upload failed";
       res.status(400).json({ message });
