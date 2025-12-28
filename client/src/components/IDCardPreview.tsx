@@ -57,7 +57,7 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
               </svg>
             </div>
             <div>
-              <h3 className="text-xs font-bold uppercase tracking-wider opacity-70">Official Identification</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider opacity-70">National Identity Card</h3>
               <p className="text-[10px] font-medium uppercase">{card.country || "Unknown Country"}</p>
             </div>
           </div>
