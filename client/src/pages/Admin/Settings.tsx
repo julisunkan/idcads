@@ -39,6 +39,11 @@ export default function Settings() {
       watermarkPosition: "center",
       watermarkFlagUrl: undefined,
       topLogoFlagUrl: undefined,
+      backgroundImageUrl: undefined,
+      titleFontFamily: "Georgia, serif",
+      titleColor: "#000000",
+      textFontFamily: "Arial, sans-serif",
+      textColor: "#000000",
     },
   });
 
@@ -52,6 +57,11 @@ export default function Settings() {
         watermarkPosition: settings.watermarkPosition || "center",
         watermarkFlagUrl: settings.watermarkFlagUrl || undefined,
         topLogoFlagUrl: settings.topLogoFlagUrl || undefined,
+        backgroundImageUrl: settings.backgroundImageUrl || undefined,
+        titleFontFamily: settings.titleFontFamily || "Georgia, serif",
+        titleColor: settings.titleColor || "#000000",
+        textFontFamily: settings.textFontFamily || "Arial, sans-serif",
+        textColor: settings.textColor || "#000000",
       });
     }
   }, [settings, form]);
@@ -242,6 +252,92 @@ export default function Settings() {
                   {form.watch('backgroundImageUrl') && (
                     <img src={form.watch('backgroundImageUrl') || ''} alt="Background" className="mt-2 h-24 w-auto rounded border" />
                   )}
+                </div>
+
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Font & Color Configuration</CardTitle>
+                <CardDescription>
+                  Customize the fonts and colors for titles and body text on ID cards.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  <FormField
+                    control={form.control}
+                    name="titleFontFamily"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title Font Family</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Georgia, serif" {...field} value={field.value || ""} />
+                        </FormControl>
+                        <FormDescription>e.g., Georgia, serif or Arial, sans-serif</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="titleColor"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title Color</FormLabel>
+                        <div className="flex gap-2">
+                          <div 
+                            className="w-10 h-10 rounded border"
+                            style={{ backgroundColor: field.value || "#000" }}
+                          />
+                          <FormControl>
+                            <Input placeholder="#000000" {...field} value={field.value || ""} />
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <FormField
+                    control={form.control}
+                    name="textFontFamily"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Body Text Font Family</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Arial, sans-serif" {...field} value={field.value || ""} />
+                        </FormControl>
+                        <FormDescription>e.g., Arial, sans-serif or Courier, monospace</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="textColor"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Body Text Color</FormLabel>
+                        <div className="flex gap-2">
+                          <div 
+                            className="w-10 h-10 rounded border"
+                            style={{ backgroundColor: field.value || "#000" }}
+                          />
+                          <FormControl>
+                            <Input placeholder="#000000" {...field} value={field.value || ""} />
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
 
               </CardContent>

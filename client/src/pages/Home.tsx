@@ -455,6 +455,10 @@ export default function Home() {
                    watermarkFlagUrl: settings?.watermarkFlagUrl || undefined,
                    topLogoFlagUrl: settings?.topLogoFlagUrl || undefined,
                    backgroundImageUrl: settings?.backgroundImageUrl || undefined,
+                   titleFontFamily: settings?.titleFontFamily || undefined,
+                   titleColor: settings?.titleColor || undefined,
+                   textFontFamily: settings?.textFontFamily || undefined,
+                   textColor: settings?.textColor || undefined,
                  }} 
                />
              </div>

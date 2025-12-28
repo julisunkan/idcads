@@ -40,6 +40,10 @@ export const settings = pgTable("settings", {
   watermarkFlagUrl: text("watermark_flag_url"), // Custom flag for watermark
   topLogoFlagUrl: text("top_logo_flag_url"), // Custom flag for top logo
   backgroundImageUrl: text("background_image_url"), // Background image for ID card
+  titleFontFamily: text("title_font_family").default("Georgia, serif"), // Font for titles
+  titleColor: text("title_color").default("#000000"), // Color for titles
+  textFontFamily: text("text_font_family").default("Arial, sans-serif"), // Font for body text
+  textColor: text("text_color").default("#000000"), // Color for body text
 });
 
 // Card Templates (Optional advanced feature, simple structure for now)

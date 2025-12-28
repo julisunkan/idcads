@@ -6,7 +6,7 @@ import { COUNTRIES } from "@/lib/countries";
 import { type Card } from "@shared/schema";
 
 interface IDCardPreviewProps {
-  card: (Partial<Card> & { watermarkText?: string; watermarkOpacity?: number; watermarkFlagUrl?: string; topLogoFlagUrl?: string; backgroundImageUrl?: string });
+  card: (Partial<Card> & { watermarkText?: string; watermarkOpacity?: number; watermarkFlagUrl?: string; topLogoFlagUrl?: string; backgroundImageUrl?: string; titleFontFamily?: string; titleColor?: string; textFontFamily?: string; textColor?: string });
   className?: string;
 }
 
@@ -211,7 +211,7 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
               {/* Full Name */}
               <div>
                 <div className="text-[8px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>NAME</div>
-                <div className="text-[14px] font-black leading-tight tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
+                <div className="text-[14px] font-black leading-tight tracking-wide" style={{ fontFamily: card.titleFontFamily || 'Georgia, serif', color: card.titleColor || '#000000' }}>
                   {card.fullName || "NOT SPECIFIED"}
                 </div>
               </div>
@@ -220,13 +220,13 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>DOB</div>
-                  <div className="text-[11px] font-bold">
+                  <div className="text-[11px] font-bold" style={{ color: card.textColor || '#000000' }}>
                     {card.dob || "--/--/----"}
                   </div>
                 </div>
                 <div>
                   <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>SEX</div>
-                  <div className="text-[11px] font-bold">
+                  <div className="text-[11px] font-bold" style={{ color: card.textColor || '#000000' }}>
                     {card.sex || "M"}
                   </div>
                 </div>
@@ -235,7 +235,7 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
               {/* ID Number */}
               <div>
                 <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ID NO.</div>
-                <div className="text-[11px] font-mono font-bold">
+                <div className="text-[11px] font-mono font-bold" style={{ color: card.textColor || '#000000' }}>
                   {card.idNumber || "--------"}
                 </div>
               </div>
@@ -243,7 +243,7 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
               {/* Address */}
               <div>
                 <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ADDRESS</div>
-                <div className="text-[10px] font-bold leading-tight line-clamp-2">
+                <div className="text-[10px] font-bold leading-tight line-clamp-2" style={{ color: card.textColor || '#000000' }}>
                   {card.address || "---"}
                 </div>
               </div>
@@ -252,13 +252,13 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ISSUED</div>
-                  <div className="text-[11px] font-bold">
+                  <div className="text-[11px] font-bold" style={{ color: card.textColor || '#000000' }}>
                     {card.issueDate || "--/--/----"}
                   </div>
                 </div>
                 <div>
                   <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>EXPIRES</div>
-                  <div className="text-[11px] font-bold">
+                  <div className="text-[11px] font-bold" style={{ color: card.textColor || '#000000' }}>
                     {card.expiryDate || "--/--/----"}
                   </div>
                 </div>
