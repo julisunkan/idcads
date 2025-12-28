@@ -10,10 +10,38 @@ interface IDCardPreviewProps {
   className?: string;
 }
 
+// Function to generate Machine-Readable Zone (MRZ)
+const generateMRZ = (card: Partial<Card>) => {
+  const countryCode = card.country || "XXX";
+  
+  // Format: Last name, First name
+  const fullName = (card.fullName || "").toUpperCase();
+  const nameParts = fullName.split(" ");
+  const lastName = nameParts[nameParts.length - 1] || "LASTNAME";
+  const firstName = nameParts.slice(0, -1).join(" ") || "FIRSTNAME";
+  
+  // Parse DOB (assuming format DD/MM/YYYY)
+  const dob = card.dob || "01011990";
+  const dobFormatted = dob.replace(/\//g, "").slice(-6); // YYMMDD
+  
+  // Line 1: Type, Country, Name
+  const line1 = `IDID${countryCode}${lastName.padEnd(30, "<")}<<${firstName.padEnd(15, "<")}`.slice(0, 44);
+  
+  // Line 2: ID Number, DOB, Sex, Expiry, Nationality
+  const idNum = (card.idNumber || "").padEnd(12, "0").slice(0, 12);
+  const status = card.status === "VALID" ? "0" : (card.status === "REVOKED" ? "2" : "1");
+  const expiryDate = (new Date().getFullYear() + 10).toString().slice(-2) + "1231"; // 10 years from now
+  
+  const line2 = `${idNum}0${dobFormatted}M${expiryDate}${countryCode}${status}<<<<<<<<<0`;
+  
+  return { line1, line2 };
+};
+
 export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
   ({ card, className }, ref) => {
     const countryName = COUNTRIES.find(c => c.code === card.country)?.name || card.country || "Unknown Country";
     const countryFlag = getCountryFlag(card.country as string);
+    const mrz = generateMRZ(card);
     
     const getThemeColors = (theme: string) => {
       switch(theme) {
@@ -58,7 +86,7 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
       <div
         ref={ref}
         className={cn(
-          "relative w-[350px] h-[220px] rounded-sm shadow-2xl overflow-hidden print:shadow-none flex flex-col font-sans",
+          "relative w-[350px] h-[240px] rounded-sm shadow-2xl overflow-hidden print:shadow-none flex flex-col font-sans",
           className
         )}
         style={{
@@ -206,6 +234,22 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
                 />
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Machine-Readable Zone (MRZ) */}
+        <div className="relative z-10 mt-auto px-2 py-1.5" style={{
+          backgroundColor: 'white',
+          borderTop: `1px solid ${colors.primary}40`,
+        }}>
+          <div className="text-[9px] leading-tight font-mono tracking-tighter" style={{
+            letterSpacing: '0.05em',
+            fontFamily: 'Courier New, monospace',
+            fontWeight: '700',
+            color: colors.primary,
+          }}>
+            <div className="break-all text-center">{mrz.line1}</div>
+            <div className="break-all text-center">{mrz.line2}</div>
           </div>
         </div>
 
