@@ -110,7 +110,7 @@ export async function registerRoutes(
       }
       
       // Get the first (and should be only) file
-      const file = Array.isArray(req.files) ? req.files[0] : req.files;
+      const file = Array.isArray(req.files) ? req.files[0] : (req.files as any);
       const filename = file.filename || `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
       
       // Construct absolute URL using the request host

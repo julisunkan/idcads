@@ -3,9 +3,6 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
 
-// Export Auth Models
-export * from "./models/auth";
-
 // === TABLE DEFINITIONS ===
 
 // ID Cards

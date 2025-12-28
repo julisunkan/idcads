@@ -63,7 +63,7 @@ export default function Settings() {
     }
   }, [settings, form]);
 
-  const handleFlagUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'watermarkFlagUrl' | 'topLogoFlagUrl') => {
+  const handleFlagUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'watermarkFlagUrl' | 'topLogoFlagUrl' | 'backgroundImageUrl') => {
     const file = e.target.files?.[0];
     if (!file) return;
 

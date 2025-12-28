@@ -90,8 +90,8 @@ export default function Dashboard() {
                               <IDCardPreview 
                                 card={{
                                   ...card,
-                                  watermarkText: settings?.watermarkText,
-                                  watermarkOpacity: settings?.watermarkOpacity,
+                                  watermarkText: settings?.watermarkText ?? undefined,
+                                  watermarkOpacity: settings?.watermarkOpacity ?? undefined,
                                 }} 
                               />
                             </div>
