@@ -86,15 +86,16 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
       <div
         ref={ref}
         className={cn(
-          "relative w-[350px] h-[240px] rounded-sm shadow-2xl overflow-hidden print:shadow-none flex flex-col font-sans",
+          "relative w-[85mm] h-[54mm] rounded-sm shadow-2xl overflow-hidden print:shadow-none flex flex-col font-sans",
           className
         )}
         style={{
           backgroundColor: colors.light,
-          borderTop: `3px solid ${colors.primary}`,
-          borderBottom: `3px solid ${colors.primary}`,
-          borderLeft: `1px solid ${colors.border}`,
-          borderRight: `1px solid ${colors.border}`,
+          borderTop: `4px solid ${colors.primary}`,
+          borderBottom: `4px solid ${colors.primary}`,
+          borderLeft: `2px solid ${colors.border}`,
+          borderRight: `2px solid ${colors.border}`,
+          fontFamily: 'Arial, sans-serif'
         }}
       >
         {/* Security Background Pattern */}
@@ -115,38 +116,46 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
         )}
 
         {/* Top Header with Seal */}
-        <div className="relative z-10 flex items-center justify-between px-3 py-2" style={{ backgroundColor: `${colors.primary}15` }}>
-          <div className="flex items-center gap-2 flex-1">
-            {/* Official Seal - Large Flag */}
-            <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center flex-shrink-0" style={{ 
+        <div className="relative z-10 grid grid-cols-12 gap-1 px-2 py-1.5 items-center" style={{ 
+          backgroundColor: `${colors.primary}20`,
+          borderBottom: `1px solid ${colors.primary}40`
+        }}>
+          {/* Left: Seal */}
+          <div className="col-span-2 flex justify-center">
+            <div className="w-10 h-10 rounded-full border-2 flex items-center justify-center" style={{ 
               borderColor: colors.primary,
               backgroundColor: 'white',
-              boxShadow: `0 2px 4px ${colors.primary}30`
+              boxShadow: `0 1px 3px ${colors.primary}40`
             }}>
-              <span className="text-4xl">{countryFlag}</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-[8px] font-black uppercase tracking-widest" style={{ color: colors.primary }}>
-                NATIONAL IDENTITY CARD
-              </div>
-              <div className="text-[10px] font-bold uppercase leading-none" style={{ color: colors.secondary }}>
-                {countryName}
-              </div>
+              <span className="text-3xl">{countryFlag}</span>
             </div>
           </div>
-          {/* Flag decoration on right */}
-          <div className="text-2xl flex-shrink-0 ml-2 opacity-80">
-            {countryFlag}
+          
+          {/* Center: Title and Country */}
+          <div className="col-span-8">
+            <div className="text-[6.5px] font-black uppercase tracking-wider" style={{ color: colors.primary, letterSpacing: '0.1em' }}>
+              NATIONAL IDENTITY CARD
+            </div>
+            <div className="text-[9px] font-black uppercase" style={{ color: colors.secondary }}>
+              {countryName}
+            </div>
+          </div>
+          
+          {/* Right: Flag */}
+          <div className="col-span-2 text-right">
+            <span className="text-2xl">{countryFlag}</span>
           </div>
         </div>
 
         {/* Main Content Area */}
-        <div className="relative z-10 flex-1 px-3 py-2.5 flex gap-2.5">
-          {/* Left: Photo */}
-          <div className="flex flex-col items-center gap-1 flex-shrink-0">
-            <div className="w-20 h-24 rounded-sm overflow-hidden" style={{ 
+        <div className="relative z-10 flex-1 px-2 py-1.5 grid grid-cols-12 gap-1.5">
+          {/* Left Column: Photo & Signature */}
+          <div className="col-span-3 flex flex-col justify-between">
+            {/* Photo */}
+            <div className="rounded-sm overflow-hidden" style={{ 
               border: `2px solid ${colors.primary}`,
-              backgroundColor: '#f0f0f0'
+              backgroundColor: '#f5f5f5',
+              aspectRatio: '2.5/3'
             }}>
               {card.photoUrl ? (
                 <img 
@@ -154,120 +163,116 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
                   alt="ID Photo" 
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = "https://placehold.co/80x96?text=Photo";
+                    (e.target as HTMLImageElement).src = "https://placehold.co/60x80?text=Photo";
                   }}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-[8px] text-center text-gray-400">
+                <div className="w-full h-full flex items-center justify-center text-[7px] font-bold text-gray-400">
                   PHOTO
                 </div>
               )}
             </div>
-            {/* Signature Area */}
-            <div className="text-center w-20">
+            
+            {/* Signature */}
+            <div className="text-center border-t pt-0.5" style={{ borderColor: colors.primary }}>
               {(card as any).signatureUrl ? (
                 <img 
                   src={(card as any).signatureUrl} 
                   alt="Signature" 
                   className="w-full h-auto"
-                  style={{ maxHeight: '24px' }}
+                  style={{ maxHeight: '16px' }}
                 />
               ) : (
-                <div className="border-t border-black/40 pt-0.5">
-                  <div className="text-[7px] font-semibold" style={{ color: colors.primary }}>Signature</div>
-                </div>
+                <div className="text-[6px] font-bold" style={{ color: colors.primary }}>SIGNATURE</div>
               )}
             </div>
           </div>
 
-          {/* Right: Information */}
-          <div className="flex-1 flex flex-col justify-between">
-            {/* Personal Info */}
-            <div className="space-y-1.5">
-              {/* Name */}
+          {/* Right Column: Information */}
+          <div className="col-span-9 flex flex-col justify-between text-black">
+            {/* Top Section */}
+            <div className="space-y-0.5">
+              {/* Full Name */}
               <div>
-                <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
-                  Full Name
-                </div>
-                <div className="text-sm font-bold leading-tight tracking-wide text-black truncate" style={{ fontFamily: 'Georgia, serif' }}>
+                <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>NAME</div>
+                <div className="text-[11px] font-black leading-tight tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
                   {card.fullName || "NOT SPECIFIED"}
                 </div>
               </div>
 
-              {/* Grid: Sex and Address */}
+              {/* 2-Column Grid: DOB and Sex */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
-                    Sex
-                  </div>
-                  <div className="text-[10px] font-semibold text-black">
-                    {(card as any).sex || "M"}
+                  <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>DOB</div>
+                  <div className="text-[9px] font-bold">
+                    {card.dob || "--/--/----"}
                   </div>
                 </div>
                 <div>
-                  <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
-                    ID Number
+                  <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>SEX</div>
+                  <div className="text-[9px] font-bold">
+                    {(card as any).sex || "M"}
                   </div>
-                  <div className="text-[10px] font-mono font-semibold text-black">
-                    {card.idNumber || "--------"}
-                  </div>
+                </div>
+              </div>
+
+              {/* ID Number */}
+              <div>
+                <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ID NO.</div>
+                <div className="text-[9px] font-mono font-bold">
+                  {card.idNumber || "--------"}
                 </div>
               </div>
 
               {/* Address */}
               <div>
-                <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
-                  Address
-                </div>
-                <div className="text-[9px] font-medium text-black leading-tight truncate">
+                <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ADDRESS</div>
+                <div className="text-[8px] font-bold leading-tight line-clamp-2">
                   {(card as any).address || "---"}
                 </div>
               </div>
 
-              {/* Grid: Issue and Expiry Dates */}
+              {/* 2-Column Grid: Issue & Expiry Dates */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
-                    Issued
-                  </div>
-                  <div className="text-[10px] font-mono font-semibold text-black">
+                  <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>ISSUED</div>
+                  <div className="text-[9px] font-bold">
                     {(card as any).issueDate || "--/--/----"}
                   </div>
                 </div>
                 <div>
-                  <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
-                    Expires
-                  </div>
-                  <div className="text-[10px] font-mono font-semibold text-black">
+                  <div className="text-[5.5px] font-black uppercase tracking-wider" style={{ color: colors.primary }}>EXPIRES</div>
+                  <div className="text-[9px] font-bold">
                     {(card as any).expiryDate || "--/--/----"}
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Bottom: Status and QR */}
-            <div className="flex items-end justify-between gap-1 pt-1 border-t" style={{ borderColor: `${colors.primary}40` }}>
-              <div className="flex items-center gap-1">
+            {/* Bottom Section: Status & QR */}
+            <div className="flex items-end justify-between gap-1" style={{ borderTop: `1px solid ${colors.primary}40`, paddingTop: '2px' }}>
+              <div className="flex items-center gap-1 flex-1">
                 <div className={cn(
-                  "px-1.5 py-0.5 rounded-sm text-[7px] font-black uppercase tracking-widest whitespace-nowrap",
-                  card.status === "VALID" ? "bg-green-600/20 text-green-800" :
-                  card.status === "REVOKED" ? "bg-red-600/20 text-red-800" :
-                  "bg-blue-600/20 text-blue-800"
+                  "px-1 py-0.5 rounded-sm text-[6px] font-black uppercase tracking-widest whitespace-nowrap",
+                  card.status === "VALID" ? "bg-green-600/40 text-green-800" :
+                  card.status === "REVOKED" ? "bg-red-600/40 text-red-800" :
+                  "bg-blue-600/40 text-blue-800"
                 )}>
                   {card.status || "VALID"}
                 </div>
-                {/* Mini flag next to status */}
-                <span className="text-xs opacity-60">{countryFlag}</span>
+                <span className="text-sm">{countryFlag}</span>
               </div>
               
               {/* QR Code */}
-              <div className="w-11 h-11 bg-white p-0.5 rounded-sm flex-shrink-0" style={{
+              <div className="bg-white p-0.5 flex-shrink-0" style={{
                 border: `1.5px solid ${colors.primary}`,
-                boxShadow: `0 1px 3px ${colors.primary}30`
+                boxShadow: `0 1px 3px ${colors.primary}40`,
+                width: '32px',
+                height: '32px'
               }}>
                 <QRCodeSVG 
                   value={`https://${window.location.host}/verify/${card.idNumber}`} 
-                  size={38}
+                  size={30}
                   level="L"
                   includeMargin={false}
                 />
