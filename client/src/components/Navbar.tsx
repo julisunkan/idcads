@@ -1,13 +1,11 @@
 import { Link, useLocation } from "wouter";
-import { useAuth } from "@/hooks/use-auth";
-import { ShieldCheck, LogOut, Settings, LayoutDashboard, Plus, Menu } from "lucide-react";
+import { ShieldCheck, Settings, LayoutDashboard, Plus, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 
 export function Navbar() {
   const [location] = useLocation();
-  const { user, logout, isAuthenticated } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   const isAdmin = location.startsWith("/admin");
@@ -20,16 +18,13 @@ export function Navbar() {
       <Link href="/verify" className={`text-sm font-medium transition-colors hover:text-primary ${location.startsWith("/verify") ? "text-primary" : "text-muted-foreground"}`}>
         Verification
       </Link>
-      {isAuthenticated && (
-        <>
-          <Link href="/admin" className={`text-sm font-medium transition-colors hover:text-primary ${location === "/admin" ? "text-primary" : "text-muted-foreground"}`}>
-            Dashboard
-          </Link>
-          <Link href="/admin/settings" className={`text-sm font-medium transition-colors hover:text-primary ${location === "/admin/settings" ? "text-primary" : "text-muted-foreground"}`}>
-            Settings
-          </Link>
-        </>
-      )}
+      {/* Hidden Admin Links - accessibility depends on knowing the URL */}
+      <Link href="/admin" className={`text-sm font-medium transition-colors hover:text-primary ${location === "/admin" ? "text-primary" : "text-muted-foreground"}`}>
+        Dashboard
+      </Link>
+      <Link href="/admin/settings" className={`text-sm font-medium transition-colors hover:text-primary ${location === "/admin/settings" ? "text-primary" : "text-muted-foreground"}`}>
+        Settings
+      </Link>
     </>
   );
 
@@ -49,21 +44,7 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-4">
-          {isAuthenticated ? (
-            <div className="flex items-center gap-4">
-              <span className="hidden md:inline-block text-sm text-muted-foreground">
-                {user?.firstName}
-              </span>
-              <Button variant="ghost" size="sm" onClick={() => logout()} className="text-muted-foreground hover:text-destructive">
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
-              </Button>
-            </div>
-          ) : (
-            <Button variant="default" size="sm" asChild>
-              <a href="/api/login">Admin Login</a>
-            </Button>
-          )}
+          {/* Admin Login button removed as per requirements */}
 
           {/* Mobile Menu */}
           <div className="md:hidden">
