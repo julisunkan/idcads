@@ -230,6 +230,20 @@ export default function Settings() {
                   </div>
                 </div>
 
+                <div>
+                  <FormLabel>Background Image</FormLabel>
+                  <FormDescription>Upload a background image for the ID card</FormDescription>
+                  <Input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={(e) => handleFlagUpload(e, 'backgroundImageUrl')}
+                    className="mt-2"
+                  />
+                  {form.watch('backgroundImageUrl') && (
+                    <img src={form.watch('backgroundImageUrl') || ''} alt="Background" className="mt-2 h-24 w-auto rounded border" />
+                  )}
+                </div>
+
               </CardContent>
             </Card>
 

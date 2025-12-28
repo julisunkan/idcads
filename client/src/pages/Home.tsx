@@ -454,6 +454,7 @@ export default function Home() {
                    watermarkOpacity: settings?.watermarkOpacity || undefined,
                    watermarkFlagUrl: settings?.watermarkFlagUrl || undefined,
                    topLogoFlagUrl: settings?.topLogoFlagUrl || undefined,
+                   backgroundImageUrl: settings?.backgroundImageUrl || undefined,
                  }} 
                />
              </div>

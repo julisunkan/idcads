@@ -39,6 +39,7 @@ export const settings = pgTable("settings", {
   watermarkEnabled: boolean("watermark_enabled").default(true),
   watermarkFlagUrl: text("watermark_flag_url"), // Custom flag for watermark
   topLogoFlagUrl: text("top_logo_flag_url"), // Custom flag for top logo
+  backgroundImageUrl: text("background_image_url"), // Background image for ID card
 });
 
 // Card Templates (Optional advanced feature, simple structure for now)

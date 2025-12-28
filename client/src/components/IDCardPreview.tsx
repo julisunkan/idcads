@@ -6,7 +6,7 @@ import { COUNTRIES } from "@/lib/countries";
 import { type Card } from "@shared/schema";
 
 interface IDCardPreviewProps {
-  card: (Partial<Card> & { watermarkText?: string; watermarkOpacity?: number; watermarkFlagUrl?: string; topLogoFlagUrl?: string });
+  card: (Partial<Card> & { watermarkText?: string; watermarkOpacity?: number; watermarkFlagUrl?: string; topLogoFlagUrl?: string; backgroundImageUrl?: string });
   className?: string;
 }
 
@@ -91,6 +91,9 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
         )}
         style={{
           backgroundColor: colors.light,
+          backgroundImage: card.backgroundImageUrl ? `url(${card.backgroundImageUrl})` : undefined,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           borderTop: `4px solid ${colors.primary}`,
           borderBottom: `4px solid ${colors.primary}`,
           borderLeft: `2px solid ${colors.border}`,
@@ -98,6 +101,11 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
           fontFamily: 'Arial, sans-serif'
         }}
       >
+        {/* Background Overlay for readability */}
+        {card.backgroundImageUrl && (
+          <div className="absolute inset-0 bg-black/20 pointer-events-none"></div>
+        )}
+
         {/* Security Background Pattern */}
         <div className="absolute inset-0 opacity-[3%] pointer-events-none" style={{
           backgroundImage: `repeating-linear-gradient(45deg, ${colors.primary}, ${colors.primary}2px, transparent 2px, transparent 4px)`,
