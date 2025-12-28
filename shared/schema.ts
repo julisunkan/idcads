@@ -37,6 +37,8 @@ export const settings = pgTable("settings", {
   watermarkOpacity: integer("watermark_opacity").default(50), // 0-100
   watermarkPosition: text("watermark_position").default("center"), // top, center, bottom
   watermarkEnabled: boolean("watermark_enabled").default(true),
+  watermarkFlagUrl: text("watermark_flag_url"), // Custom flag for watermark
+  topLogoFlagUrl: text("top_logo_flag_url"), // Custom flag for top logo
 });
 
 // Card Templates (Optional advanced feature, simple structure for now)

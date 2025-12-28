@@ -135,12 +135,12 @@ export async function registerRoutes(
   });
 
   // File Upload (Public)
-  app.post('/api/upload', upload.single('photo'), (req, res) => {
+  app.post('/api/upload', upload.single('file'), (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: "No file provided" });
     }
-    const photoUrl = `/uploads/photos/${req.file.filename}`;
-    res.json({ photoUrl });
+    const url = `/uploads/photos/${req.file.filename}`;
+    res.json({ url });
   });
 
   return httpServer;

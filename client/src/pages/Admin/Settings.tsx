@@ -37,6 +37,8 @@ export default function Settings() {
       watermarkOpacity: 50,
       watermarkEnabled: true,
       watermarkPosition: "center",
+      watermarkFlagUrl: undefined,
+      topLogoFlagUrl: undefined,
     },
   });
 
@@ -48,9 +50,32 @@ export default function Settings() {
         watermarkOpacity: settings.watermarkOpacity || 50,
         watermarkEnabled: settings.watermarkEnabled ?? true,
         watermarkPosition: settings.watermarkPosition || "center",
+        watermarkFlagUrl: settings.watermarkFlagUrl || undefined,
+        topLogoFlagUrl: settings.topLogoFlagUrl || undefined,
       });
     }
   }, [settings, form]);
+
+  const handleFlagUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'watermarkFlagUrl' | 'topLogoFlagUrl') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.url) {
+        form.setValue(field, data.url);
+      }
+    } catch (error) {
+      console.error('Upload failed:', error);
+    }
+  };
 
   const onSubmit = (data: InsertSettings) => {
     updateSettings(data);
@@ -165,6 +190,36 @@ export default function Settings() {
                     </FormItem>
                   )}
                 />
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <FormLabel>Watermark Flag Image</FormLabel>
+                    <FormDescription>Upload a custom flag image to use as watermark</FormDescription>
+                    <Input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={(e) => handleFlagUpload(e, 'watermarkFlagUrl')}
+                      className="mt-2"
+                    />
+                    {form.watch('watermarkFlagUrl') && (
+                      <img src={form.watch('watermarkFlagUrl') || ''} alt="Watermark flag" className="mt-2 h-12 w-auto rounded" />
+                    )}
+                  </div>
+
+                  <div>
+                    <FormLabel>Top Logo Flag Image</FormLabel>
+                    <FormDescription>Upload a custom flag image for the top logo area</FormDescription>
+                    <Input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={(e) => handleFlagUpload(e, 'topLogoFlagUrl')}
+                      className="mt-2"
+                    />
+                    {form.watch('topLogoFlagUrl') && (
+                      <img src={form.watch('topLogoFlagUrl') || ''} alt="Top logo flag" className="mt-2 h-12 w-auto rounded" />
+                    )}
+                  </div>
+                </div>
 
               </CardContent>
             </Card>

@@ -6,7 +6,7 @@ import { COUNTRIES } from "@/lib/countries";
 import { type Card } from "@shared/schema";
 
 interface IDCardPreviewProps {
-  card: Partial<Card> & { watermarkText?: string; watermarkOpacity?: number };
+  card: Partial<Card> & { watermarkText?: string; watermarkOpacity?: number; watermarkFlagUrl?: string; topLogoFlagUrl?: string };
   className?: string;
 }
 
@@ -127,7 +127,11 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
               backgroundColor: 'white',
               boxShadow: `0 1px 3px ${colors.primary}40`
             }}>
-              <span className="text-3xl">{countryFlag}</span>
+              {(card as any).topLogoFlagUrl ? (
+                <img src={(card as any).topLogoFlagUrl} alt="Logo" className="w-full h-full object-cover rounded-full" />
+              ) : (
+                <span className="text-3xl">{countryFlag}</span>
+              )}
             </div>
           </div>
           
@@ -143,7 +147,11 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
           
           {/* Right: Flag */}
           <div className="col-span-2 text-right">
-            <span className="text-2xl">{countryFlag}</span>
+            {(card as any).topLogoFlagUrl ? (
+              <img src={(card as any).topLogoFlagUrl} alt="Logo" className="h-8 w-auto" />
+            ) : (
+              <span className="text-2xl">{countryFlag}</span>
+            )}
           </div>
         </div>
 
