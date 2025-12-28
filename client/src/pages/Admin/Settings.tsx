@@ -75,6 +75,9 @@ export default function Settings() {
         method: 'POST',
         body: formData,
       });
+      if (!res.ok) {
+        throw new Error(`Upload failed: ${res.statusText}`);
+      }
       const data = await res.json();
       if (data.photoUrl) {
         form.setValue(field, data.photoUrl);
