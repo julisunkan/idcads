@@ -194,22 +194,52 @@ export const IDCardPreview = forwardRef<HTMLDivElement, IDCardPreviewProps>(
                 </div>
               </div>
 
-              {/* Grid: DOB and ID Number */}
+              {/* Grid: Sex and Address */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
-                    Date of Birth
+                    Sex
                   </div>
-                  <div className="text-[11px] font-mono font-semibold text-black">
-                    {card.dob || "--/--/----"}
+                  <div className="text-[10px] font-semibold text-black">
+                    {(card as any).sex || "M"}
                   </div>
                 </div>
                 <div>
                   <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
                     ID Number
                   </div>
-                  <div className="text-[11px] font-mono font-semibold text-black">
+                  <div className="text-[10px] font-mono font-semibold text-black">
                     {card.idNumber || "--------"}
+                  </div>
+                </div>
+              </div>
+
+              {/* Address */}
+              <div>
+                <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
+                  Address
+                </div>
+                <div className="text-[9px] font-medium text-black leading-tight truncate">
+                  {(card as any).address || "---"}
+                </div>
+              </div>
+
+              {/* Grid: Issue and Expiry Dates */}
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
+                    Issued
+                  </div>
+                  <div className="text-[10px] font-mono font-semibold text-black">
+                    {(card as any).issueDate || "--/--/----"}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[7px] font-black uppercase tracking-wider" style={{ color: colors.primary, opacity: 0.7 }}>
+                    Expires
+                  </div>
+                  <div className="text-[10px] font-mono font-semibold text-black">
+                    {(card as any).expiryDate || "--/--/----"}
                   </div>
                 </div>
               </div>

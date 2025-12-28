@@ -54,9 +54,13 @@ export default function Home() {
     defaultValues: {
       fullName: "",
       dob: "",
+      sex: "M",
+      address: "",
       idNumber: Math.random().toString(36).substring(2, 10).toUpperCase(),
       country: "USA",
       theme: "blue",
+      issueDate: new Date().toISOString().split('T')[0],
+      expiryDate: new Date(Date.now() + 10*365*24*60*60*1000).toISOString().split('T')[0],
       photoUrl: "",
       signatureUrl: "",
     },
@@ -110,9 +114,13 @@ export default function Home() {
         form.reset({
           fullName: "",
           dob: "",
+          sex: "M",
+          address: "",
           idNumber: Math.random().toString(36).substring(2, 10).toUpperCase(),
           country: "USA",
           theme: "blue",
+          issueDate: new Date().toISOString().split('T')[0],
+          expiryDate: new Date(Date.now() + 10*365*24*60*60*1000).toISOString().split('T')[0],
           photoUrl: "",
           signatureUrl: "",
         });
@@ -187,27 +195,100 @@ export default function Home() {
 
                       <FormField
                         control={form.control}
-                        name="idNumber"
+                        name="sex"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>ID Number</FormLabel>
-                            <div className="flex gap-2">
+                            <FormLabel>Sex</FormLabel>
+                            <Select 
+                              onValueChange={(val) => {
+                                field.onChange(val);
+                                handleValuesChange({ sex: val });
+                              }} 
+                              defaultValue={field.value}
+                            >
                               <FormControl>
-                                <Input {...field} readOnly />
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
                               </FormControl>
-                              <Button 
-                                type="button" 
-                                variant="outline" 
-                                size="icon"
-                                onClick={() => {
-                                  const newId = Math.random().toString(36).substring(2, 10).toUpperCase();
-                                  field.onChange(newId);
-                                  handleValuesChange({ idNumber: newId });
-                                }}
-                              >
-                                <RefreshCw className="h-4 w-4" />
-                              </Button>
-                            </div>
+                              <SelectContent>
+                                <SelectItem value="M">Male (M)</SelectItem>
+                                <SelectItem value="F">Female (F)</SelectItem>
+                                <SelectItem value="X">Other (X)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Address</FormLabel>
+                          <FormControl>
+                            <Input placeholder="123 Main Street, City, Country" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="idNumber"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>ID Number</FormLabel>
+                          <div className="flex gap-2">
+                            <FormControl>
+                              <Input {...field} readOnly />
+                            </FormControl>
+                            <Button 
+                              type="button" 
+                              variant="outline" 
+                              size="icon"
+                              onClick={() => {
+                                const newId = Math.random().toString(36).substring(2, 10).toUpperCase();
+                                field.onChange(newId);
+                                handleValuesChange({ idNumber: newId });
+                              }}
+                            >
+                              <RefreshCw className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="issueDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Issue Date</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="expiryDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Expiry Date</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}

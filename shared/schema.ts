@@ -12,10 +12,14 @@ export * from "./models/auth";
 export const cards = pgTable("cards", {
   id: serial("id").primaryKey(),
   fullName: text("full_name").notNull(),
-  dob: text("dob").notNull(), // stored as string for simplicity or timestamp
+  dob: text("dob").notNull(),
+  sex: text("sex"), // M, F, X
+  address: text("address"), // Full address
   idNumber: text("id_number").notNull().unique(),
   country: text("country").notNull(),
   theme: text("theme").notNull(), // 'blue', 'green', 'gold'
+  issueDate: text("issue_date"), // Issue date
+  expiryDate: text("expiry_date"), // Expiry date
   photoUrl: text("photo_url"), // Uploaded photo path
   signatureUrl: text("signature_url"), // Signature from signature pad
   qrCodeUrl: text("qr_code_url"), // Generated QR code path
@@ -52,6 +56,10 @@ export const insertCardSchema = createInsertSchema(cards).omit({
   generatedImageUrl: true, 
   generatedPdfUrl: true 
 }).extend({
+  sex: z.string().optional(),
+  address: z.string().optional(),
+  issueDate: z.string().optional(),
+  expiryDate: z.string().optional(),
   photoUrl: z.string().optional(),
   signatureUrl: z.string().optional(),
 });
